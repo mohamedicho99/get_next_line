@@ -85,7 +85,8 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	tl = s1_len + s2_len + 1;
-	str = malloc(sizeof(char) * tl);
+	str = malloc(sizeof(char) * (tl + 1));
+	// this will cause 
 	if (!str)
 		return (NULL);
 	ft_memcpy(str, s1, s1_len);
