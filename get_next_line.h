@@ -1,7 +1,7 @@
 #ifndef GET_NEXT_LINE_H
 #define GET_NEXT_LINE_H
 
-#define BUFFERSIZE 10
+#define BUFFER_SIZE 10
 
 #include <stdio.h>
 #include <unistd.h>
@@ -15,5 +15,7 @@ int is_newline(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ret_ln(char *cache);
 void ft_memcpy(char *dst, const char *src, size_t n);
+char	*reset_cache(char *cache, char **buffer);
+char	*read_file(char **cache, char **buffer, int fd);
 
 #endif

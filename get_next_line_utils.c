@@ -12,7 +12,7 @@ int ft_strlen(const char *s)
     i = 0;
     if (!s)
         return (i);
-    while (s[i])
+    while (s && s[i])
         i++;
     return (i);
 }
@@ -92,4 +92,30 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len + 1);
 	return (str);
+}
+
+char	*reset_cache(char *cache, char **buffer)
+{
+	int	i;
+
+	i = 0;
+	while (cache[i] && cache[i] != '\n')
+		i++;
+	if (cache[i] == '\n')
+		i++;
+	*buffer = malloc(sizeof(char) * (i + 1));
+	if (!*buffer)
+		return (free(cache), NULL);
+
+	ft_memcpy(*buffer, cache, i);
+	char *temp = ft_strdup(cache + i);
+	// i think i should free cache here! the old one 
+	// because this temp is creating a new one 
+	// which leaves the old one behind, so memory leak???
+	// if i'm to implement it i must put it directly 
+	// before returning from the function
+	if (!temp)
+		return (free(*buffer), *buffer = NULL, free(cache), cache = NULL, NULL);
+
+	return (temp);
 }
