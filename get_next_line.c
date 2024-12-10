@@ -63,7 +63,7 @@ char	*get_next_line(int fd)
 
 char *get_next_line(int fd)
 {
-	int			bytes;
+	ssize_t			bytes;
     char 		*buffer;
     static char	*cache;
     if (fd < 0)
@@ -81,17 +81,14 @@ char *get_next_line(int fd)
 		buffer[bytes] = 0;
         if (bytes == 0)
             return (buffer);
-		// cache gets overwritten here?
-		// do i need to free it again inside ft_strjoin
-		// i don't have to free buffer now because i still
-		// have its address
 		cache = ft_strjoin(cache, buffer);
         if (is_newline(cache))
             break;
     }
 	cache = reset_cache(cache, &buffer);
 	if (!cache)
-		return (free(buffer), buffer = NULL, free(cache), cache = NULL, NULL);
+		return (free(buffer), buffer = NULL, NULL);
+	//free(cache);
 	return (buffer);
 }
 
@@ -100,16 +97,22 @@ int main(void)
     int fd = open("test.txt", O_RDWR);
     //int fd = open("ten.txt", O_RDWR);
 
-    char *line;	
-	int ln;
-	while ((line = get_next_line(fd)) && ln != 0)
+    char *line = get_next_line(fd);	
+	int ln = ft_strlen(line);
+	printf("%s\n", line);
+	/*
+	while (line && ln != 0)
 	{
+		printf("it's working: %s\n", line);
+		//write_to_fd(0, line, ln);
+		
+		free(line);
+		line = get_next_line(fd);
 		ln = ft_strlen(line);
-		write_to_fd(0, line, ln);
-		//printf("%d\n", ln);
-	}
+	}*/
 
     close(fd);
+	printf("%p\nfreed!\n", line);
     free(line);
 
     return 0;

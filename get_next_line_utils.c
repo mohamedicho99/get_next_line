@@ -69,7 +69,7 @@ void ft_memcpy(char *dst, const char *src, size_t n)
 	d[i] = '\0';
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char *s1, const char *s2)
 {
 	int		tl;
 	char	*str;
@@ -90,6 +90,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		return (NULL);
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len + 1);
+	free(s1);
 	return (str);
 }
 
@@ -102,25 +103,18 @@ char	*reset_cache(char *cache, char **buffer)
 		i++;
 	if (cache[i] == '\n')
 		i++;
+	free(*buffer);
 	*buffer = malloc(sizeof(char) * (i + 1));
 	if (!*buffer)
 		return (free(cache), NULL);
+	printf("%p\ncreated\n", *buffer);
 
 	ft_memcpy(*buffer, cache, i);
 	char *temp = ft_strdup(cache + i);
-	// TODO: ask someone this question:
-	// i think i should free cache here! the old one 
-	// because this temp is creating a new one 
-	// which leaves the old one behind, so memory leak???
-	// if i'm to implement it i must put it directly 
-	// before returning from the function
-	// 
-	// but can we even free it like this? does this count? work?
 	free(cache);
 
 	if (!temp)
 		return (free(*buffer), *buffer = NULL, NULL);
-		//return (free(*buffer), *buffer = NULL, free(cache), cache = NULL, NULL);
 
 	return (temp);
 }
