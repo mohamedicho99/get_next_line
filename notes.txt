@@ -3,3 +3,7 @@ cc get_next_line.c get_next_line_utils.c -g3 -fsanitize=address
 cc get_next_line.c get_next_line_utils.c -g3
 
 valgrind --leak-check=full --show-leak-kinds=all ./a.out 
+
+what does this line mean?
+	9 bytes in 1 blocks are still reachable in loss record 1 of 1
+	valgrind returned this to me

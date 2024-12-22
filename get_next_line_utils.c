@@ -1,13 +1,13 @@
 #include "get_next_line.h"
 
-void write_to_fd(int fd, char *buffer, int ln)
+void	write_to_fd(int fd, char *buffer, int ln)
 {
     write(fd, buffer, ln);
 }
 
-int ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
-    int i;
+    int	i;
 
     i = 0;
     if (!s)
@@ -17,9 +17,9 @@ int ft_strlen(const char *s)
     return (i);
 }
 
-int is_newline(const char *s)
+int	is_newline(const char *s)
 {
-    int i;
+    int	i;
 
     i = 0;
     if (!s)
@@ -53,10 +53,10 @@ char	*ft_strdup(const char *s)
 	return (dst);
 }
 
-void ft_memcpy(char *dst, const char *src, size_t n)
+void	ft_memcpy(char *dst, const char *src, size_t n)
 {
-	unsigned char *d = (unsigned char *)dst;
-	unsigned char *s = (unsigned char *)src;
+	unsigned char	*d = (unsigned char *)dst;
+	unsigned char	*s = (unsigned char *)src;
 	size_t i = 0;
 	if (!dst || !src)
 		return ;
@@ -91,12 +91,16 @@ char	*ft_strjoin(char *s1, const char *s2)
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len + 1);
 	free(s1);
+	static int i = 0;
+	printf("freed in strjoin \t -> %p at %d turn\n", s1, i);
+	i++;
 	return (str);
 }
 
 char	*reset_cache(char *cache, char **buffer)
 {
 	int	i;
+	char	*temp;
 
 	i = 0;
 	while (cache[i] && cache[i] != '\n')
@@ -107,14 +111,12 @@ char	*reset_cache(char *cache, char **buffer)
 	*buffer = malloc(sizeof(char) * (i + 1));
 	if (!*buffer)
 		return (free(cache), NULL);
-	printf("%p\ncreated\n", *buffer);
+	printf("created in reset_cache -> %p\n", *buffer);
 
 	ft_memcpy(*buffer, cache, i);
-	char *temp = ft_strdup(cache + i);
+	temp = ft_strdup(cache + i);
 	free(cache);
-
 	if (!temp)
 		return (free(*buffer), *buffer = NULL, NULL);
-
 	return (temp);
 }

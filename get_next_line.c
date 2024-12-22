@@ -11,7 +11,6 @@
  * what if strjoin didn't even succeed at doing anything?
  * any memory leaks there?
  * how can you test that?
- *
  * */
 
 /*
@@ -79,6 +78,10 @@ char *get_next_line(int fd)
         if (bytes < 0)
             return (free(buffer), buffer = NULL, free(cache), cache = NULL, NULL);
 		buffer[bytes] = 0;
+		// if bytes == 0
+		// i should add a free(cache) here
+		// because we've reached the end of file and thus no
+		// need for it to be allocated anymore
         if (bytes == 0)
             return (buffer);
 		cache = ft_strjoin(cache, buffer);
@@ -89,17 +92,22 @@ char *get_next_line(int fd)
 	if (!cache)
 		return (free(buffer), buffer = NULL, NULL);
 	//free(cache);
+	// look more into why aren't we freeing cache here 
+	// and why it works with valgrind and fsanitizer
+	// check if this cache gets freed or not
+	// check the last allocation it ever does
+	// and if it gets freed then fine and use that in defence
 	return (buffer);
 }
 
 int main(void)
 {
     int fd = open("test.txt", O_RDWR);
-    //int fd = open("ten.txt", O_RDWR);
 
+	//get_next_line(fd);
     char *line = get_next_line(fd);	
 	int ln = ft_strlen(line);
-	printf("%s\n", line);
+	printf("here: %s\n", line);
 	/*
 	while (line && ln != 0)
 	{
