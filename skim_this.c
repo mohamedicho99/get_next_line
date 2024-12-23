@@ -1,42 +1,43 @@
 #include "get_next_line.h"
+#include <limits.h>
 
-char *get_next_line(int fd)
+char	*read_file(int fd, char **cache)
 {
-	ssize_t			bytes;
-    char			*buffer;
-	char 			*address_holder;
-    static char		*cache;
-	// or buffersize >= intmax
-    if (fd < 0)
-        return (NULL);
+	char	*buffer;
+	ssize_t	bytes;
 
-	// remove 1ul coz it should return a null
-    buffer = malloc(sizeof(char) * BUFFER_SIZE + 1UL);
-    if (!buffer)
-        return (NULL);
-    bytes = 1;
-	int i = 0;
+	bytes = 1;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1UL));
+	if (!buffer)
+		return (NULL);
     while (bytes > 0)
     {
         bytes = read(fd, buffer, BUFFER_SIZE);
+		printf("buffer: %s\n", buffer);
         if (bytes < 0)
-            return (free(buffer), buffer = NULL, free(cache), cache = NULL, NULL);
+            return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, NULL);
 		buffer[bytes] = 0;
         if (bytes == 0)
-		{
-			//free(cache);
-			//printf("end of file reached, freed -> %p at %d turn\n", cache, i);
             return (buffer);
-		}
-        if (is_newline(cache))
+        if (is_newline(*cache))
 		{
-			printf("{+} found new line in cache at %d turn.\n", i);
+			printf("new line is found in cache, break, mov to cach_reset\n");
+			printf("\n\ncache -> %s\n\n", *cache);
+			*cache = ft_strjoin(*cache, buffer);
             break;
 		}
-		cache = ft_strjoin(cache, buffer);
-		printf("created in get_next_line -> %p at %d turn\n", cache, i);
-		i++;
+		*cache = ft_strjoin(*cache, buffer);
     }
+	return (buffer);
+}
+
+char *get_next_line(int fd)
+{
+    char			*buffer;
+    static char		*cache;
+    if (fd < 0 && BUFFER_SIZE <= INT_MAX)
+        return (NULL);
+	buffer = read_file(fd, &cache);
 	cache = reset_cache(cache, &buffer);
 	if (!cache)
 		return (free(buffer), buffer = NULL, NULL);
@@ -48,11 +49,14 @@ int main(void)
     int fd = open("test.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
-    //free(line);
-	//line = get_next_line(fd);
-	printf("here: %s", line);
+	printf("first line: %s\n", line);
+    free(line);
 
-	printf("freed at main! -> %p\n", line);
+	printf("\n\ncalling get_next_line again...\n\n");
+
+	line = get_next_line(fd);
+	printf("second line: %s\n", line);
+
     free(line);
     close(fd);
 

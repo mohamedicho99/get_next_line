@@ -71,17 +71,19 @@ void	ft_memcpy(char *dst, const char *src, size_t n)
 
 char	*ft_strjoin(char *s1, const char *s2)
 {
-	int		tl;
+	printf("entring strjoin\n");
+	printf("cache -> %s\n", s1);
+	size_t	tl; // this was an int
 	char	*str;
 	size_t	s1_len;
 	size_t	s2_len;
 
 	if (!s1 && !s2)
 		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
+	if (!s1)
+		return (ft_strdup(s2));
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	tl = s1_len + s2_len + 1;
@@ -91,14 +93,19 @@ char	*ft_strjoin(char *s1, const char *s2)
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len + 1);
 	free(s1);
-	static int i = 0;
-	printf("freed in strjoin \t -> %p at %d turn\n", s1, i);
-	i++;
 	return (str);
 }
 
 char	*reset_cache(char *cache, char **buffer)
 {
+	// focus on what this function does before that next call that next call 
+	// try one thing just for the sacke of figuring this out, just to make sure
+	// empty it every time, so don't have it as static
+	// where does making it static make a difference in that next call?
+	static int j = 0;
+	printf("entering reset_cache\n");
+	printf("j = %d, cache -> %s\n", j, cache);
+	j++;
 	int	i;
 	char	*temp;
 
@@ -111,12 +118,12 @@ char	*reset_cache(char *cache, char **buffer)
 	*buffer = malloc(sizeof(char) * (i + 1));
 	if (!*buffer)
 		return (free(cache), NULL);
-	printf("created in reset_cache -> %p\n", *buffer);
-
 	ft_memcpy(*buffer, cache, i);
 	temp = ft_strdup(cache + i);
 	free(cache);
 	if (!temp)
 		return (free(*buffer), *buffer = NULL, NULL);
+	printf("temp or cache will be %s\n", temp);
+	printf("exiting reset_cache\n");
 	return (temp);
 }

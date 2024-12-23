@@ -16,6 +16,6 @@ char	*ft_strjoin(char *s1, const char *s2);
 char	*ret_ln(char *cache);
 void ft_memcpy(char *dst, const char *src, size_t n);
 char	*reset_cache(char *cache, char **buffer);
-void	read_file(char **cache, char **buffer, int fd);
+//char	read_file(char **cache, char **buffer, int fd);
 
 #endif
