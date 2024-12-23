@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 #include <limits.h>
-
+// comment
 char	*read_file(int fd, char **cache)
 {
 	char	*buffer;
