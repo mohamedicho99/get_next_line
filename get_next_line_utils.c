@@ -71,8 +71,6 @@ void	ft_memcpy(char *dst, const char *src, size_t n)
 
 char	*ft_strjoin(char *s1, const char *s2)
 {
-	printf("entring strjoin\n");
-	printf("cache -> %s\n", s1);
 	size_t	tl; // this was an int
 	char	*str;
 	size_t	s1_len;
@@ -98,14 +96,6 @@ char	*ft_strjoin(char *s1, const char *s2)
 
 char	*reset_cache(char *cache, char **buffer)
 {
-	// focus on what this function does before that next call that next call 
-	// try one thing just for the sacke of figuring this out, just to make sure
-	// empty it every time, so don't have it as static
-	// where does making it static make a difference in that next call?
-	static int j = 0;
-	printf("entering reset_cache\n");
-	printf("j = %d, cache -> %s\n", j, cache);
-	j++;
 	int	i;
 	char	*temp;
 
@@ -123,7 +113,5 @@ char	*reset_cache(char *cache, char **buffer)
 	free(cache);
 	if (!temp)
 		return (free(*buffer), *buffer = NULL, NULL);
-	printf("temp or cache will be %s\n", temp);
-	printf("exiting reset_cache\n");
 	return (temp);
 }
