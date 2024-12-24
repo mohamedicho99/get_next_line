@@ -97,20 +97,15 @@ char	*ft_strjoin(char *s1, const char *s2)
 	return (str);
 }
 
-// what if we passed the address of cach and return buffer
-// so we do the opposite, that way we can do if cache[i + 1] == 0
-// we free cach and return buffer
+// string alo\nhere
+// string alo\n
+// \nstuff
 char	*reset_cache(char *cache, char **buffer)
 {
 	int		i;
 	char	*temp;
 
 	i = 0;
-	// string alo\nhere
-	// string alo\n
-	// \nstuff
-	size_t l_cache = ft_strlen(cache);
-
 	while (cache[i] && cache[i] != '\n')     
 		i++;
 	if (cache[i] == '\n')
@@ -120,12 +115,6 @@ char	*reset_cache(char *cache, char **buffer)
 	if (!*buffer)
 		return (free(cache), NULL);
 	ft_memcpy(*buffer, cache, i);
-	/*
-	if (cache[i + 1] == 0)
-	{
-		free(cache);
-	}
-	*/
 	temp = ft_strdup(cache + i);
 	free(cache);
 	if (!temp)

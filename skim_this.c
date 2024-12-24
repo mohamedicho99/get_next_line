@@ -35,6 +35,8 @@ char *get_next_line(int fd)
     if (fd < 0 && BUFFER_SIZE <= INT_MAX)
         return (NULL);
 	buffer = read_file(fd, &cache);
+	if (!buffer)
+		return (NULL);
 	cache = reset_cache(cache, &buffer);
 	if (!cache)
 		return (free(buffer), buffer = NULL, NULL);
@@ -43,7 +45,7 @@ char *get_next_line(int fd)
 
 int main(void)
 {
-    int fd = open("test.txt", O_RDWR);
+    int fd = open("ten.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
 	if (!line)
