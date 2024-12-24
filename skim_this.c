@@ -16,14 +16,14 @@ char	*read_file(int fd, char **cache)
         if (bytes < 0)
             return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, NULL);
 		buffer[bytes] = 0;
-        if (bytes == 0)
-            return (buffer);
         if (is_newline(*cache))
 		{
 			*cache = ft_strjoin(*cache, buffer);
             break;
 		}
 		*cache = ft_strjoin(*cache, buffer);
+        if (bytes == 0)
+            return (buffer);
     }
 	return (buffer);
 }
@@ -46,9 +46,15 @@ int main(void)
     int fd = open("test.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
+	if (!line)
+	{
+		printf("error, exiting...\n");
+		return 1;
+	}
 	printf("first line: %s", line);
     free(line);
 
+/*
 	line = get_next_line(fd);
 	printf("second line: %s", line);
     free(line);
@@ -60,7 +66,7 @@ int main(void)
 	line = get_next_line(fd);
 	printf("fourth line: %s", line);
     free(line);
-
+*/
     close(fd);
 
     return 0;
