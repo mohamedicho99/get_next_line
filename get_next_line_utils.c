@@ -5,6 +5,75 @@ void	write_to_fd(int fd, char *buffer, int ln)
     write(fd, buffer, ln);
 }
 
+/* strlcpy
+// strlcat
+// use them to make a new strjoin
+
+size_t	ft_strlcpy(const char *dst, const char *src, size_t size) 
+{
+	size_t	l_src;
+	size_t	i;
+
+	// what if one of them is there?
+	if (!src || !dst)
+		return (0);
+	l_src = ft_strlen(src);
+	if (size == 0)
+		return (l_src);
+	i = 0;
+	while (src[i] && i < size - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return (l_src);
+}
+
+size_t	ft_strlcat(const char *dst, const char *src, size_t dstsize)
+{
+	size_t	l_src;
+	size_t	d_len;
+	size_t	i;
+	size_t	j;
+
+	j = 0;
+	if (!dst || !src)
+		return (0);
+	l_src = ft_strlen(src);
+	if (dstsize == 0)
+		return (l_src);
+	d_len = ft_strlen(dst);
+	if (d_len >= dstsize)
+		return (l_src + dstsize);
+	i = d_len;
+	while (src[j] && j < (dstsize - d_len - 1))
+		dst[i++] = src[j++];
+	dst[i] = '\0';
+	return (d_len + l_src);
+}
+
+char *ft_strjoin(const char *s1, const char *s2)
+{
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	n_str = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (!n_str)
+		return (NULL);
+
+	ft_strlcpy(n_str, s1, s1_len + 1);
+	ft_strlcat(n_str, s2, s2_len + s1_len + 1);
+	return (n_str);
+}
+*/
+
 int	ft_strlen(const char *s)
 {
     int	i;
@@ -72,7 +141,7 @@ void	ft_memcpy(char *dst, const char *src, size_t n)
 	d[i] = '\0';
 }
 
-char	*ft_strjoin(char *s1, const char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	tl;
 	char	*str;

@@ -32,20 +32,25 @@ char *get_next_line(int fd)
 {
     char			*buffer;
     static char		*cache;
+	
     if (fd < 0 && BUFFER_SIZE <= INT_MAX)
         return (NULL);
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1UL));
+	if (!buffer)
+		return (NULL);
 	buffer = read_file(fd, &cache);
 	if (!buffer)
 		return (NULL);
 	cache = reset_cache(cache, &buffer);
 	if (!cache)
 		return (free(buffer), buffer = NULL, NULL);
+	//system("leaks a.out");
 	return (buffer);
 }
 
 int main(void)
 {
-    int fd = open("ten.txt", O_RDWR);
+    int fd = open("test.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
 	if (!line)
