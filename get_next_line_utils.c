@@ -5,11 +5,6 @@ void	write_to_fd(int fd, char *buffer, int ln)
     write(fd, buffer, ln);
 }
 
-/* strlcpy
-// strlcat
-// use them to make a new strjoin
-*/
-
 size_t	ft_strlcpy(char *dst, const char *src, size_t size) 
 {
 	size_t	l_src;
@@ -125,50 +120,21 @@ char *ft_strjoin(char *s1, char *s2)
 	return (n_str);
 }
 
-// string alo\nhere
-// string alo\n
 char	*reset_cache(char **cache)
 {
 	int		i;
 	char	*line;
 
 	i = 0;
-	while (cache[i] && *cache[i] != '\n')     
+	while (**cache && *cache[i] != '\n')     
 		i++;
-	if (*cache[i] == '\n')
+	if (cache[i] && *cache[i] == '\n')
 		i++;
 	line = ft_strdup(*cache + i);
 	if (!line)
-		free(cache);
+		return (free(cache), NULL);
 	free(cache);
 	return (line);
 }
 
-/* \nstuff
-void	reset_cache(char **cache, char **buffer)
-{
-	int		i;
-    char    *temp;
 
-	i = 0;
-	while (cache[i] && *cache[i] != '\n')     
-		i++;
-	if (cache[i] && *cache[i] == '\n')
-		i++;
-	free(*buffer);
-	*buffer = malloc(sizeof(char) * (i + 1));
-	if (!*buffer)
-    {
-		free(*cache);
-        return ;
-    }
-	ft_strlcpy(*buffer, *cache, i + 1);
-	temp = ft_strdup(*cache + i);
-    printf("temp: |%s|\n", temp);
-    if (!temp)
-        free(*buffer);
-	free(*cache);
-    *cache = temp;
-    printf("cache --- %p\n", *cache);
-}
-*/

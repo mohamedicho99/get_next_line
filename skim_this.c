@@ -7,6 +7,8 @@ ssize_t	read_file(int fd, char **cache)
 	ssize_t	bytes;
 
 	bytes = 1;
+	if (BUFFER_SIZE <= 0)
+		return (0);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1UL));
 	if (!buffer)
 		return (0);
@@ -24,45 +26,41 @@ ssize_t	read_file(int fd, char **cache)
             break;
 		}
 		*cache = ft_strjoin(*cache, buffer);
-        if (!*cache)
-			free(buffer);
     }
-	free(buffer);
-	return (bytes);
+	return (free(buffer), bytes);
 }
 
 char *get_next_line(int fd)
 {
-    char			*buffer;
+	char			*line;
     static char		*cache;
 	ssize_t			read_status;
 
-    if (fd < 0 && BUFFER_SIZE <= INT_MAX)
+    if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
 	read_status = read_file(fd, &cache);
 	if (read_status <= 0)
 		return (free(cache), NULL);
-	printf("[+] cache --> %s\n", cache);
 	/*
-	line = reset_cache(&cache);
-	if (!cache)
-		return (free(buffer), buffer = NULL, NULL);
 	*/
-	return (cache);
+	line = reset_cache(&cache);
+	if (!line)
+		return (NULL);
+	return (line);
 }
 
 int main(void)
 {
-    int fd = open("empty.txt", O_RDWR);
+    int fd = open("test.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
 	if (!line)
 	{
-		printf("error, exiting...\n");
+		printf("{!} line was not allocated, exiting...\n");
 		return 1;
 	}
-	printf("first line: %s", line);
-    //free(line);
+	printf("{+} Line -- > %s", line);
+    free(line);
 
 /*
 	line = get_next_line(fd);
