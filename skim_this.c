@@ -1,7 +1,7 @@
 #include "get_next_line.h"
 #include <limits.h>
 
-char	*read_file(int fd, char **cache)
+ssize_t	read_file(int fd, char **cache)
 {
 	char	*buffer;
 	ssize_t	bytes;
@@ -9,54 +9,46 @@ char	*read_file(int fd, char **cache)
 	bytes = 1;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1UL));
 	if (!buffer)
-		return (NULL);
+		return (0);
     while (bytes > 0)
     {
         bytes = read(fd, buffer, BUFFER_SIZE);
-        if (bytes == 0)
-            free(buffer);
-        if (bytes < 0)
-            return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, NULL);
+        if (bytes <= 0)
+            return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
 		buffer[bytes] = '\0';
         if (is_newline(*cache))
 		{
-            printf("[1] strjoin\n");
 			*cache = ft_strjoin(*cache, buffer);
             if (!*cache)
-            {
-                printf("{0} it's emptry asat....");
-                return (NULL);
-            }
+				return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
             break;
 		}
 		*cache = ft_strjoin(*cache, buffer);
         if (!*cache)
-        {
-            printf("{1} it's emptry asat....\n");
-            return (NULL);
-        }
-        if (bytes == 0)
-            return (buffer);
+			free(buffer);
     }
-	return (buffer);
+	free(buffer);
+	return (bytes);
 }
 
 char *get_next_line(int fd)
 {
     char			*buffer;
     static char		*cache;
-	
+	ssize_t			read_status;
+
     if (fd < 0 && BUFFER_SIZE <= INT_MAX)
         return (NULL);
-	buffer = read_file(fd, &cache);
-	if (!buffer)
-		return (NULL);
-    printf("cache |%s|\n", cache);
-	cache = reset_cache(cache, &buffer);
-    printf("cache -- > %p\n", &cache);
+	read_status = read_file(fd, &cache);
+	if (read_status <= 0)
+		return (free(cache), NULL);
+	printf("[+] cache --> %s\n", cache);
+	/*
+	line = reset_cache(&cache);
 	if (!cache)
 		return (free(buffer), buffer = NULL, NULL);
-	return (buffer);
+	*/
+	return (cache);
 }
 
 int main(void)
@@ -70,7 +62,7 @@ int main(void)
 		return 1;
 	}
 	printf("first line: %s", line);
-    free(line);
+    //free(line);
 
 /*
 	line = get_next_line(fd);

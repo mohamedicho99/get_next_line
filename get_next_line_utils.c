@@ -15,7 +15,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	size_t	l_src;
 	size_t	i;
 
-	// what if one of them is there?
 	if (!src || !dst)
 		return (0);
 	l_src = ft_strlen(src);
@@ -103,25 +102,6 @@ char	*ft_strdup(const char *s)
 	return (dst);
 }
 
-void	ft_memcpy(char *dst, const char *src, size_t n)
-{
-	unsigned char	*d;
-	unsigned char	*s;
-	size_t			i;
-
-	if (!dst || !src)
-		return ;
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		d[i] = s[i];
-		i++;
-	}
-	d[i] = '\0';
-}
-
 char *ft_strjoin(char *s1, char *s2)
 {
     char *n_str;
@@ -131,15 +111,9 @@ char *ft_strjoin(char *s1, char *s2)
 	if ((!s1 || s1[0] == '\0') && (!s2 || s2[0] == '\0'))
 		return (NULL);
 	if (!s1)
-    {
-        printf("s2: |%s|\n", s2);
 		return (ft_strdup(s2));
-    }
 	if (!s2)
-    {
-        printf("s1: |%s|\n", s1);
 		return (ft_strdup(s1));
-    }
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	n_str = malloc(sizeof(char) * (s1_len + s2_len + 1));
@@ -153,26 +127,21 @@ char *ft_strjoin(char *s1, char *s2)
 
 // string alo\nhere
 // string alo\n
-char	*reset_cache(char *cache, char **buffer)
+char	*reset_cache(char **cache)
 {
 	int		i;
-	char	*temp;
+	char	*line;
 
 	i = 0;
-	while (cache[i] && cache[i] != '\n')     
+	while (cache[i] && *cache[i] != '\n')     
 		i++;
-	if (cache[i] == '\n')
+	if (*cache[i] == '\n')
 		i++;
-	free(*buffer);
-	*buffer = malloc(sizeof(char) * (i + 1));
-	if (!*buffer)
-		return (free(cache), NULL);
-	ft_strlcpy(*buffer, cache, i + 1);
-	temp = ft_strdup(cache + i);
+	line = ft_strdup(*cache + i);
+	if (!line)
+		free(cache);
 	free(cache);
-	if (!temp)
-		return (free(*buffer), *buffer = NULL, NULL);
-	return (temp);
+	return (line);
 }
 
 /* \nstuff
