@@ -41,9 +41,7 @@ char *get_next_line(int fd)
 	read_status = read_file(fd, &cache);
 	if (read_status <= 0)
 		return (free(cache), NULL);
-	/*
-	*/
-	line = reset_cache(&cache);
+	line = reset_cache(cache);
 	if (!line)
 		return (NULL);
 	return (line);

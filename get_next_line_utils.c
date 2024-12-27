@@ -120,20 +120,26 @@ char *ft_strjoin(char *s1, char *s2)
 	return (n_str);
 }
 
-char	*reset_cache(char **cache)
+char	*reset_cache(char *cache)
 {
 	int		i;
 	char	*line;
+	char	*temp;
 
 	i = 0;
-	while (**cache && *cache[i] != '\n')     
+	while (cache[i] != '\n')
 		i++;
-	if (cache[i] && *cache[i] == '\n')
+	if (cache[i] == '\n')
 		i++;
-	line = ft_strdup(*cache + i);
+	line = malloc(sizeof(char) * (i + 1));
 	if (!line)
 		return (free(cache), NULL);
+	ft_strlcpy(line, cache, i + 1);
+	temp = ft_strdup(cache + i);
+	if (!temp)
+		return (free(cache), free(line), NULL);
 	free(cache);
+	cache = temp;
 	return (line);
 }
 
