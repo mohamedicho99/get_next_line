@@ -120,27 +120,30 @@ char *ft_strjoin(char *s1, char *s2)
 	return (n_str);
 }
 
-char	*reset_cache(char *cache)
+char	*reset_cache(char **cache)
 {
 	int		i;
 	char	*line;
 	char	*temp;
-
+	char	*current;
+	
+	current = *cache;
 	i = 0;
-	while (cache[i] != '\n')
+	while (current[i] && current[i] != '\n')
 		i++;
-	if (cache[i] == '\n')
+	if (current[i] == '\n')
 		i++;
 	line = malloc(sizeof(char) * (i + 1));
 	if (!line)
-		return (free(cache), NULL);
-	ft_strlcpy(line, cache, i + 1);
-	temp = ft_strdup(cache + i);
+		return (free(current), NULL);
+	ft_strlcpy(line, current, i + 1);
+	temp = ft_strdup(current + i);
 	if (!temp)
-		return (free(cache), free(line), NULL);
-	free(cache);
-	cache = temp;
+		return (free(current), free(line), NULL);
+	free(current);
+	*cache = temp;
 	return (line);
 }
 
-
+// the address of cache here in rc should be the same one as gnl
+// so we need to pass by reference

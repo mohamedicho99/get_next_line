@@ -1,5 +1,4 @@
 #include "get_next_line.h"
-#include <limits.h>
 
 ssize_t	read_file(int fd, char **cache)
 {
@@ -16,7 +15,7 @@ ssize_t	read_file(int fd, char **cache)
     {
         bytes = read(fd, buffer, BUFFER_SIZE);
         if (bytes <= 0)
-            return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
+			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
 		buffer[bytes] = '\0';
         if (is_newline(*cache))
 		{
@@ -41,7 +40,7 @@ char *get_next_line(int fd)
 	read_status = read_file(fd, &cache);
 	if (read_status <= 0)
 		return (free(cache), NULL);
-	line = reset_cache(cache);
+	line = reset_cache(&cache);
 	if (!line)
 		return (NULL);
 	return (line);
@@ -49,7 +48,7 @@ char *get_next_line(int fd)
 
 int main(void)
 {
-    int fd = open("test.txt", O_RDWR);
+    int fd = open("ten.txt", O_RDWR);
 
     char *line = get_next_line(fd);	
 	if (!line)
@@ -57,10 +56,9 @@ int main(void)
 		printf("{!} line was not allocated, exiting...\n");
 		return 1;
 	}
-	printf("{+} Line -- > %s", line);
+	printf("first line: %s", line);
     free(line);
 
-/*
 	line = get_next_line(fd);
 	printf("second line: %s", line);
     free(line);
@@ -72,7 +70,12 @@ int main(void)
 	line = get_next_line(fd);
 	printf("fourth line: %s", line);
     free(line);
+/*
 */
+	line = get_next_line(fd);
+	printf("fifth line: %s", line);
+    free(line);
+
     close(fd);
 
     return 0;
