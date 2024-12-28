@@ -14,20 +14,20 @@ ssize_t	read_file(int fd, char **cache)
     while (bytes > 0)
     {
         bytes = read(fd, buffer, BUFFER_SIZE);
-		printf("{+} bytes: %zd\n", bytes);
-        if (bytes <= 0)
+        if (bytes < 0)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
 		buffer[bytes] = '\0';
+		if (bytes == 0 && ft_strlen(*cache))
+			break;
+		*cache = ft_strjoin(*cache, buffer);
         if (is_newline(*cache))
 		{
-			printf("{0} cache: \n");
-			*cache = ft_strjoin(*cache, buffer);
-			printf("{1} cache: \n");
+			//*cache = ft_strjoin(*cache, buffer);
             if (!*cache)
 				return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
             break;
 		}
-		*cache = ft_strjoin(*cache, buffer);
+		//*cache = ft_strjoin(*cache, buffer);
     }
 	return (free(buffer), bytes);
 }
@@ -46,6 +46,12 @@ char *get_next_line(int fd)
 	line = reset_cache(&cache);
 	if (!line)
 		return (NULL);
+	if (!ft_strlen(cache) && !read_status)
+	{
+		free(cache);
+		cache = NULL;
+	}
+
 	return (line);
 }
 

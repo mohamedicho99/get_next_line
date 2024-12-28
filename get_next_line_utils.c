@@ -137,12 +137,18 @@ char	*reset_cache(char **cache)
 	if (!line)
 		return (free(current), NULL);
 	ft_strlcpy(line, current, i + 1);
+	if (!ft_strlen(current + i))
+	{
+		free(*cache);
+		*cache = NULL;
+		return (line);
+	}
 	temp = ft_strdup(current + i);
 	if (!temp)
 		return (free(current), free(line), NULL);
-	free(current);
-	*cache = temp;
-	return (line);
+	//free(current);
+	//*cache = temp;
+	return (free(current), *cache = temp, line);
 }
 
 // the address of cache here in rc should be the same one as gnl
