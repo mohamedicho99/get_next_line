@@ -14,12 +14,15 @@ ssize_t	read_file(int fd, char **cache)
     while (bytes > 0)
     {
         bytes = read(fd, buffer, BUFFER_SIZE);
+		printf("{+} bytes: %zd\n", bytes);
         if (bytes <= 0)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
 		buffer[bytes] = '\0';
         if (is_newline(*cache))
 		{
+			printf("{0} cache: \n");
 			*cache = ft_strjoin(*cache, buffer);
+			printf("{1} cache: \n");
             if (!*cache)
 				return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
             break;
@@ -59,6 +62,7 @@ int main(void)
 	printf("first line: %s", line);
     free(line);
 
+/*
 	line = get_next_line(fd);
 	printf("second line: %s", line);
     free(line);
@@ -70,11 +74,11 @@ int main(void)
 	line = get_next_line(fd);
 	printf("fourth line: %s", line);
     free(line);
-/*
-*/
+
 	line = get_next_line(fd);
 	printf("fifth line: %s", line);
     free(line);
+*/
 
     close(fd);
 
