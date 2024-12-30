@@ -4,4 +4,44 @@ cc get_next_line.c get_next_line_utils.c -g3
 
 valgrind --leak-check=full --show-leak-kinds=all ./a.out 
 
-thisis me asat9394
+this is me asat9394
+
+==========
+
+you don't want to exit out of the program the second you hit end of file!
+
+what you want to do is:
+	check if cache still has some text
+	if so check for newline
+	if so return line
+
+cases of cache:
+	text with more than one \n
+	text with one \n
+	text with no \n
+
+cases of read_status in get_next_line:
+	return (free(cache), cache = NULL, NULL)
+		-> only when end of file is reached and cache is empty
+
+	if !end_of_file
+		-> keep going
+
+	if end_of_file && cache_is_empty
+		-> return (free(cache), cache = NULL, NULL)
+
+
+_________ 
+
+every function should do only one fucking job!
+if it's confusing, then it's not doing one job
+
+-> read_file function
+	it should read until it hits end of file
+	it should return info that will help keep going in our program
+
+so what should it return?
+
+\0
+sadfsdaf
+sadfasdf

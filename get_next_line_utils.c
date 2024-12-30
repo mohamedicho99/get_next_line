@@ -5,6 +5,37 @@ void	write_to_fd(int fd, char *buffer, int ln)
     write(fd, buffer, ln);
 }
 
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*ptr;
+	unsigned char	c;
+	size_t			i;
+
+	ptr = (unsigned char *)s;
+	i = 0;
+	c = 0;
+	while (i != n)
+	{
+		ptr[i] = c;
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t n_el, size_t size)
+{
+	void	*space;
+	size_t	t_len;
+
+	t_len = n_el * size;
+	if (size != 0 && t_len / size != n_el)
+		return (NULL);
+	space = malloc(t_len);
+	if (!space)
+		return (NULL);
+	ft_bzero(space, t_len);
+	return (space);
+}
+
 size_t	ft_strlcpy(char *dst, const char *src, size_t size) 
 {
 	size_t	l_src;
@@ -84,7 +115,7 @@ char	*ft_strdup(const char *s)
 
 	if (!s)
 		return (NULL);
-	dst = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	dst = ft_calloc(sizeof(char), ft_strlen(s) + 1);
 	if (!dst)
 		return (NULL);
 	i = 0;
@@ -111,7 +142,7 @@ char *ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s1));
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
-	n_str = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	n_str = ft_calloc(sizeof(char), s1_len + s2_len + 1);
 	if (!n_str)
 		return (NULL);
 	ft_strlcpy(n_str, s1, s1_len + 1);
@@ -126,30 +157,21 @@ char	*reset_cache(char **cache)
 	char	*line;
 	char	*temp;
 	char	*current;
-	
+
 	current = *cache;
 	i = 0;
 	while (current[i] && current[i] != '\n')
 		i++;
 	if (current[i] == '\n')
 		i++;
-	line = malloc(sizeof(char) * (i + 1));
+	line = ft_calloc(sizeof(char), i + 1);
 	if (!line)
 		return (free(current), NULL);
 	ft_strlcpy(line, current, i + 1);
-	if (!ft_strlen(current + i))
-	{
-		free(*cache);
-		*cache = NULL;
-		return (line);
-	}
 	temp = ft_strdup(current + i);
+	free(*cache);
 	if (!temp)
-		return (free(current), free(line), NULL);
-	//free(current);
-	//*cache = temp;
-	return (free(current), *cache = temp, line);
+		return (free(line), NULL);
+	return (*cache = temp, line);
 }
 
-// the address of cache here in rc should be the same one as gnl
-// so we need to pass by reference

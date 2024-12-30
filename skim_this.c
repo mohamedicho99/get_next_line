@@ -5,86 +5,61 @@ ssize_t	read_file(int fd, char **cache)
 	char	*buffer;
 	ssize_t	bytes;
 
-	bytes = 1;
 	if (BUFFER_SIZE <= 0)
 		return (0);
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1UL));
+	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (!buffer)
 		return (0);
-    while (bytes > 0)
+    while (bytes = read(fd, buffer, BUFFER_SIZE))
     {
-        bytes = read(fd, buffer, BUFFER_SIZE);
         if (bytes < 0)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
-		buffer[bytes] = '\0';
-		if (bytes == 0 && ft_strlen(*cache))
+		if (bytes == 0)
 			break;
 		*cache = ft_strjoin(*cache, buffer);
+		if (!*cache)
+			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
         if (is_newline(*cache))
-		{
-            if (!*cache)
-				return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
             break;
-		}
     }
 	return (free(buffer), bytes);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	char			*line;
     static char		*cache;
 	ssize_t			read_status;
 
+	cache = NULL;
     if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
 	read_status = read_file(fd, &cache);
-	if (read_status <= 0)
-		return (free(cache), NULL);
+	if (read_status < 0 || (!cache && !read_status))
+		return (free(cache), cache = NULL, NULL);
 	line = reset_cache(&cache);
 	if (!line)
 		return (NULL);
-	if (!ft_strlen(cache) && !read_status)
-	{
-		free(cache);
-		cache = NULL;
-	}
-
 	return (line);
 }
 
 int main(void)
 {
-    int fd = open("test.txt", O_RDWR);
+    int fd = open("ten.txt", O_RDWR);
+	char *line;
 
-    char *line = get_next_line(fd);	
-	if (!line)
+	int num = 1;
+	while (line = get_next_line(fd))
 	{
-		printf("{!} line was not allocated, exiting...\n");
-		return 1;
+		if (!line)
+		{
+			printf("{!} line was not allocated, exiting...\n");
+			return 1;
+		}
+		printf("{+} Line %d: %s", num, line);
+		free(line);
+		num++;
 	}
-	printf("first line: %s", line);
-    free(line);
-
-	line = get_next_line(fd);
-	printf("second line: %s", line);
-    free(line);
-
-	line = get_next_line(fd);
-	printf("third line: %s", line);
-    free(line);
-
-	line = get_next_line(fd);
-	printf("fourth line: %s", line);
-    free(line);
-
-/*
-	line = get_next_line(fd);
-	printf("fifth line: %s", line);
-    free(line);
-*/
-
     close(fd);
-
     return 0;
 }
