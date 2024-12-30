@@ -1,0 +1,9 @@
+
+b breakpoint
+n next line
+s step into function 
+print
+c continue to next breakpoint
+layout src (ctrl l to clear it)
+cc -g *.c
+
