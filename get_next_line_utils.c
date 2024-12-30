@@ -27,6 +27,8 @@ void	*ft_calloc(size_t n_el, size_t size)
 	size_t	t_len;
 
 	t_len = n_el * size;
+	if (!size || size < 0)
+		return (NULL);
 	if (size != 0 && t_len / size != n_el)
 		return (NULL);
 	space = malloc(t_len);
@@ -78,7 +80,6 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (d_len + l_src);
 }
-
 
 int	ft_strlen(const char *s)
 {
@@ -151,27 +152,56 @@ char *ft_strjoin(char *s1, char *s2)
 	return (n_str);
 }
 
-char	*reset_cache(char **cache)
+char *ft_strchr(const char *s, int c)
 {
-	int		i;
-	char	*line;
-	char	*temp;
-	char	*current;
+	unsigned char	*ptr;
+	unsigned char	cc;
+	size_t			i;
 
-	current = *cache;
+	ptr = (unsigned char*)s;
+	cc = (unsigned char)c;
 	i = 0;
-	while (current[i] && current[i] != '\n')
+	while (ptr[i])
+	{
+		if (ptr[i] == cc)
+			return ((char*)ptr + i);
 		i++;
-	if (current[i] == '\n')
-		i++;
-	line = ft_calloc(sizeof(char), i + 1);
-	if (!line)
-		return (free(current), NULL);
-	ft_strlcpy(line, current, i + 1);
-	temp = ft_strdup(current + i);
-	free(*cache);
-	if (!temp)
-		return (free(line), NULL);
-	return (*cache = temp, line);
+	}
+	if (cc == '\0')
+		return ((char*)ptr + i);
+	return (NULL);
 }
 
+char	*reset_cache(char **cache)
+{
+	char	*ptr;
+	char	*line;
+	char	*tmp;
+	size_t	ptr_l;
+
+	ptr = ft_strchr(*cache, '\n');
+	if (!ptr && !*cache)
+		return (NULL);
+	// what if *cache and !ptr
+	//ptr = NULL;
+	ptr++;
+	if (!ptr && *cache)
+	{
+		// i don't think we ever entered this
+		// but do more tests
+		printf("{+} we hit it...");
+		return (*cache);
+	}
+	ptr_l = (ptr - *cache) + 1;
+	//line = ft_calloc(sizeof(char), ((ptr - *cache) + 1));
+	line = ft_calloc(sizeof(char), ptr_l);
+	if (!line)
+		return (free(*cache), *cache = NULL, NULL);
+	//ft_strlcpy(line, *cache, (ptr - *cache) + 1);
+	ft_strlcpy(line, *cache, ptr_l);
+	tmp = ft_strdup(ptr);
+	if (!tmp)
+		return (free(line), line = NULL, free(*cache), cache = NULL, NULL);
+	free(*cache);
+	return (*cache = tmp, line);
+}

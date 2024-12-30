@@ -10,7 +10,7 @@ ssize_t	read_file(int fd, char **cache)
 	buffer = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (!buffer)
 		return (0);
-    while (bytes = read(fd, buffer, BUFFER_SIZE))
+    while ((bytes = read(fd, buffer, BUFFER_SIZE)))
     {
         if (bytes < 0)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
@@ -31,25 +31,29 @@ char	*get_next_line(int fd)
     static char		*cache;
 	ssize_t			read_status;
 
-	cache = NULL;
     if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
 	read_status = read_file(fd, &cache);
-	if (read_status < 0 || (!cache && !read_status))
+	if (read_status < 0 && cache)
 		return (free(cache), cache = NULL, NULL);
-	line = reset_cache(&cache);
-	if (!line)
-		return (NULL);
+	// check this value out
+	if (cache)
+	{
+		line = reset_cache(&cache);
+		if (!line)
+			return (NULL);
+	}
 	return (line);
 }
 
 int main(void)
 {
-    int fd = open("ten.txt", O_RDWR);
+    int fd = open("test.txt", O_RDWR);
 	char *line;
 
 	int num = 1;
-	while (line = get_next_line(fd))
+	printf("_________________________\n");
+	while ((line = get_next_line(fd)))
 	{
 		if (!line)
 		{
@@ -59,6 +63,7 @@ int main(void)
 		printf("{+} Line %d: %s", num, line);
 		free(line);
 		num++;
+		printf("_________________________\n");
 	}
     close(fd);
     return 0;
