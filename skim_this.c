@@ -7,19 +7,20 @@ ssize_t	read_file(int fd, char **cache)
 
 	if (BUFFER_SIZE <= 0)
 		return (0);
-	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	buffer = malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (!buffer)
 		return (0);
     while ((bytes = read(fd, buffer, BUFFER_SIZE)))
     {
         if (bytes < 0)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
+		buffer[bytes] = 0;
 		if (bytes == 0)
 			break;
 		*cache = ft_strjoin(*cache, buffer);
 		if (!*cache)
 			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
-        if (is_newline(*cache))
+        if (ft_strchr(*cache, '\n'))
             break;
     }
 	return (free(buffer), bytes);

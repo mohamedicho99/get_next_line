@@ -19,5 +19,6 @@ char	*ret_ln(char *cache);
 void	ft_memcpy(char *dst, const char *src, size_t n);
 char	*reset_cache(char **cache);
 void	*ft_calloc(size_t n_el, size_t size);
+char	*ft_strchr(const char *s, int c);
 
 #endif
