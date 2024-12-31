@@ -45,3 +45,17 @@ so what should it return?
 \0
 sadfsdaf
 sadfasdf
+
+
+_____________________________
+
+tests:
+
+	ok - word
+	ok - long line
+	ok - single line
+	ok - letter
+	ok - newline
+	ok - empty
+	ok - 4 lines
+	ok - buffersize big small negative
