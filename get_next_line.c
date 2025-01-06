@@ -13,13 +13,13 @@ ssize_t	read_file(int fd, char **cache)
     while ((bytes = read(fd, buffer, BUFFER_SIZE)))
     {
         if (bytes < 0)
-			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
+			return (free(buffer), free(*cache), *cache = NULL, bytes);
 		buffer[bytes] = 0;
 		if (bytes == 0)
 			break;
 		*cache = ft_strjoin(*cache, buffer);
 		if (!*cache)
-			return (free(buffer), buffer = NULL, free(*cache), *cache = NULL, bytes);
+			return (free(buffer), free(*cache), *cache = NULL, bytes);
         if (ft_strchr(*cache, '\n'))
             break;
     }
