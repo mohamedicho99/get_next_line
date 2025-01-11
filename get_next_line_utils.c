@@ -6,16 +6,11 @@
 /*   By: mohel-mo <mohel-mo@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 22:36:11 by mohel-mo          #+#    #+#             */
-/*   Updated: 2024/12/31 23:29:16 by mohel-mo         ###   ########.fr       */
+/*   Updated: 2025/01/11 12:13:59 by mohel-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	write_to_fd(int fd, char *buffer, int ln)
-{
-	write(fd, buffer, ln);
-}
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
