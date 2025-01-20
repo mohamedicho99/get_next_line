@@ -70,6 +70,8 @@ char	*ft_strchr(const char *s, int c)
 	unsigned char	cc;
 	size_t			i;
 
+	if (!s)
+		return (NULL);
 	ptr = (unsigned char *)s;
 	cc = (unsigned char)c;
 	i = 0;

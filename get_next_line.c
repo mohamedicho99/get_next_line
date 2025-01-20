@@ -12,23 +12,38 @@
 
 #include "get_next_line.h"
 
+char    *ft_get_last_line(char **cache)
+{
+    char    *line;
+    size_t  l_cache;
+    
+    l_cache = ft_strlen(*cache);
+    line = malloc(sizeof(char) * l_cache + 1);
+    if (!line)
+        return (free(*cache), *cache = NULL, NULL);
+	ft_strlcpy(line, *cache, l_cache + 1);
+	return (free(*cache), *cache = NULL, line);
+}
+
 char	*reset_cache(char **cache)
 {
-	char	*ptr;
+	char	*n_ptr;
 	char	*line;
 	char	*tmp;
 	size_t	ptr_l;
 
-	ptr = ft_strchr(*cache, '\n');
-	if (!ptr)
+	n_ptr = ft_strchr(*cache, '\n');
+	if (!n_ptr)
+        return (ft_get_last_line(cache));
+	n_ptr++;
+	if (!n_ptr)
 		return (free(*cache), *cache = NULL, NULL);
-	ptr++;
-	ptr_l = (ptr - *cache) + 1;
+	ptr_l = (n_ptr - *cache) + 1;
 	line = malloc(ptr_l * sizeof(char));
 	if (!line)
 		return (free(*cache), *cache = NULL, NULL);
 	ft_strlcpy(line, *cache, ptr_l);
-	tmp = ft_strdup(ptr);
+	tmp = ft_strdup(n_ptr);
 	if (!tmp)
 		return (free(line), line = NULL, free(*cache), cache = NULL, NULL);
 	free(*cache);
